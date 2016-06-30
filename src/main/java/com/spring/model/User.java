@@ -20,8 +20,6 @@ public class User {
 	@Column(name="username")
 	private String username;
 	
-	@Column(name="username")
-	private String name;
 	
 	@Column(name="password")
 	private String password;
@@ -46,10 +44,10 @@ public class User {
 		this.username = username;
 	}
 	public String getName() {
-		return name;
+		return username;
 	}
 	public void setName(String name) {
-		this.name = name;
+		this.username = name;
 	}
 	public String getPassword() {
 		return password;

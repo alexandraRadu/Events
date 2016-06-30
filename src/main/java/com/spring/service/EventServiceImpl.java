@@ -4,13 +4,15 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.spring.exception.EventNotFound;
 import com.spring.model.Event;
 import com.spring.repository.EventRepository;
 
-public class EventServiceImpl {
+@Service
+public class EventServiceImpl implements EventService {
 
 	@Resource
 	private EventRepository eventRepository;

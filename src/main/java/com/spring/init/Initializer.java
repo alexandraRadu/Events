@@ -13,6 +13,7 @@ public class Initializer implements WebApplicationInitializer{
 
 	private static final String DISPATCHER_SERVLET_NAME = "dispatcher";
 
+	@Override
 	public void onStartup(ServletContext servletContext)
 			throws ServletException {
 		AnnotationConfigWebApplicationContext ctx = new AnnotationConfigWebApplicationContext();
@@ -23,7 +24,8 @@ public class Initializer implements WebApplicationInitializer{
 
 		Dynamic servlet = servletContext.addServlet(DISPATCHER_SERVLET_NAME,
 				new DispatcherServlet(ctx));
-		servlet.addMapping("/");
+		
 		servlet.setLoadOnStartup(1);
+		servlet.addMapping("/");
 	}
 }

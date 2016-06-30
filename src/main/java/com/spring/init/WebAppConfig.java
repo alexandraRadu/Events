@@ -9,33 +9,33 @@ import org.hibernate.ejb.HibernatePersistence;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.view.JstlView;
-import org.springframework.web.servlet.view.UrlBasedViewResolver;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 @Configuration
 @EnableWebMvc
 @EnableTransactionManagement
-@ComponentScan("com.spr")
+@ComponentScan(basePackages = {"com.spring.controller", "com.spring.service", "com.spring.repository"})
 @PropertySource("classpath:application.properties")
 @EnableJpaRepositories("com.spring.repository")
 public class WebAppConfig {
 
-	private static final String PROPERTY_NAME_DATABASE_DRIVER = "db.driver";
-	private static final String PROPERTY_NAME_DATABASE_PASSWORD = "db.password";
-	private static final String PROPERTY_NAME_DATABASE_URL = "db.url";
-	private static final String PROPERTY_NAME_DATABASE_USERNAME = "db.username";
+	private static final String PROPERTY_NAME_DATABASE_DRIVER = "spring.datasource.driver-class-name";
+	private static final String PROPERTY_NAME_DATABASE_PASSWORD = "spring.datasource.password";
+	private static final String PROPERTY_NAME_DATABASE_URL = "spring.datasource.url";
+	private static final String PROPERTY_NAME_DATABASE_USERNAME = "spring.datasource.username";
 
-	private static final String PROPERTY_NAME_HIBERNATE_DIALECT = "hibernate.dialect";
-	private static final String PROPERTY_NAME_HIBERNATE_SHOW_SQL = "hibernate.show_sql";
+	private static final String PROPERTY_NAME_HIBERNATE_DIALECT = "spring.jpa.database-platform";
+	//private static final String PROPERTY_NAME_HIBERNATE_SHOW_SQL = "hibernate.show_sql";
 	private static final String PROPERTY_NAME_ENTITYMANAGER_PACKAGES_TO_SCAN = "entitymanager.packages.to.scan";
 
 	@Resource
@@ -68,9 +68,14 @@ public class WebAppConfig {
 	private Properties hibProperties() {
 		Properties properties = new Properties();
 		properties.put(PROPERTY_NAME_HIBERNATE_DIALECT,	env.getRequiredProperty(PROPERTY_NAME_HIBERNATE_DIALECT));
-		properties.put(PROPERTY_NAME_HIBERNATE_SHOW_SQL, env.getRequiredProperty(PROPERTY_NAME_HIBERNATE_SHOW_SQL));
+		//properties.put(PROPERTY_NAME_HIBERNATE_SHOW_SQL, env.getRequiredProperty(PROPERTY_NAME_HIBERNATE_SHOW_SQL));
 		return properties;
 	}
+	
+	/*@Bean
+	public PersistenceAnnotationBeanPostProcessor paPostProcessor() {
+		return new PersistenceAnnotationBeanPostProcessor();
+	}*/
 
 	@Bean
 	public JpaTransactionManager transactionManager() {
@@ -79,20 +84,19 @@ public class WebAppConfig {
 		return transactionManager;
 	}
 
-	@Bean
-	public UrlBasedViewResolver setupViewResolver() {
-		UrlBasedViewResolver resolver = new UrlBasedViewResolver();
-		resolver.setPrefix("/WEB-INF/pages/");
-		resolver.setSuffix(".jsp");
-		resolver.setViewClass(JstlView.class);
-		return resolver;
-	}
+	 @Bean
+	    public ViewResolver getViewResolver(){
+	        InternalResourceViewResolver resolver = new InternalResourceViewResolver();
+	        resolver.setPrefix("/WEB-INF/pages/");
+	        resolver.setSuffix(".jsp");
+	        return resolver;
+	    }
 	
-	@Bean
+	/*@Bean
 	public ResourceBundleMessageSource messageSource() {
 		ResourceBundleMessageSource source = new ResourceBundleMessageSource();
 		source.setBasename(env.getRequiredProperty("message.source.basename"));
 		source.setUseCodeAsDefaultMessage(true);
 		return source;
-	}
+	}*/
 }

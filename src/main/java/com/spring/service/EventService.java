@@ -2,6 +2,9 @@ package com.spring.service;
 
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+
 import com.spring.exception.EventNotFound;
 import com.spring.model.Event;
 
